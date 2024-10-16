@@ -13,18 +13,18 @@ app.append(header);
 let Count = 0;
 let growthRate = 0;
 
-// Count variables for upgrades
-let upgradesPurchased = { A: 0, B: 0, C: 0 };
+// Available items defined in an array
+const availableItems = [
+  { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0 },
+  { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0 },
+  { name: "Production line", initialCost: 1000, rate: 40.0, currentCost: 1000, count: 0 },
+  { name: "High precision Assembly line", initialCost: 12500, rate: 700.0, currentCost: 12500, count: 0 },
+  { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0 }
+];
+
+
 // Multiplier for price increase
 const priceMultiplier = 1.15;
-
-// Define upgrades
-const upgrades = {
-  A: { initialCost: 10, rate: 0.1, currentCost: 10 },
-  B: { initialCost: 100, rate: 2.0, currentCost: 100 },
-  C: { initialCost: 1000, rate: 50.0, currentCost: 1000 }
-};
-
 
 // Create display element
 const counterDisplay = document.createElement('div');
@@ -37,68 +37,57 @@ app.appendChild(upgradesDisplay);
 function updateDisplay() {
   counterDisplay.textContent = `Make: ${Count.toFixed(2)} Bullets`;
   growthRateDisplay.textContent = `Craft Rate: ${(growthRate * 240).toFixed(2)} Bullets`;
-  upgradesDisplay.textContent = `Upgrades - A: ${upgradesPurchased.A}, B: ${upgradesPurchased.B}, C: ${upgradesPurchased.C}`;
+  upgradesDisplay.textContent = availableItems.map(item => `${item.name}: ${item.count}`).join(", ");
 }
+updateDisplay();
 
 
 // Create a button element
-const button = document.createElement('button');
+const craftButton = document.createElement('button');
 
 // Set the button text
-button.textContent = 'Crafts a Bullet';
+craftButton.textContent = 'Crafts a Bullet';
 
 // Add an event listener (optional, but usually useful!)
-button.addEventListener('click', () => {
+craftButton.addEventListener('click', () => {
     Count++; // Increment counter
     updateDisplay(); // Update the display
   });
   
 // Append the button to the body or another element
-document.body.appendChild(button);
+document.body.appendChild(craftButton);
 
-// Create upgrade buttons
-function createUpgradeButton(key: keyof typeof upgrades) {
+// Create upgrade buttons using availableItems array
+availableItems.forEach(item => {
   const upgradeButton = document.createElement('button');
-  const { rate } = upgrades[key];
-  updateUpgradeButtonText(upgradeButton, key);
-
+  upgradeButton.textContent = `Purchase ${item.name} (${item.rate} rockets/sec for ${item.currentCost} units)`;
+  app.appendChild(upgradeButton);
+  
   upgradeButton.addEventListener('click', () => {
-    const { currentCost } = upgrades[key];
-    if (Count >= currentCost) {
-      Count -= currentCost;
-      growthRate += rate / 240;
-      upgradesPurchased[key]++;
-      upgrades[key].currentCost *= priceMultiplier; // Increase cost
-      updateUpgradeButtonText(upgradeButton, key);
+    if (Count >= item.currentCost) {
+      Count -= item.currentCost;
+      growthRate += item.rate / 240;
+      item.currentCost *= priceMultiplier;
+      item.count++;
+      updateUpgradeButtonText(upgradeButton, item);
       updateDisplay();
     }
   });
-  app.appendChild(upgradeButton);
 
-  return upgradeButton;
-}
+});
 
 // Update button text to reflect current cost
-function updateUpgradeButtonText(button: HTMLButtonElement, key: keyof typeof upgrades) {
-  const { rate, currentCost } = upgrades[key];
-  button.textContent = `Purchase Machine ${key} (${rate} Bullets/sec for ${currentCost.toFixed(2)} Bullets)`;
+function updateUpgradeButtonText(button: HTMLButtonElement, item: any) {
+  button.textContent = `Purchase ${item.name} (${item.rate} rockets/sec for ${item.currentCost.toFixed(2)} units)`;
 }
-// Append the upgrade buttons to the app
-const upgradeButtons = {
-  A: createUpgradeButton('A'),
-  B: createUpgradeButton('B'),
-  C: createUpgradeButton('C')
-};
 
 
 
 // Function for animation frame updates
 function animateCounter() {
   Count += growthRate; // Increment by a fraction per frame
-  Object.entries(upgradeButtons).forEach(([key, button]) => {
-    const { currentCost } = upgrades[key as keyof typeof upgrades];
-    button.disabled = Count < currentCost;
-  });
+  
+  craftButton.disabled = false;
   updateDisplay(); // Update the display
   requestAnimationFrame(animateCounter); // Schedule the next frame
 }
