@@ -13,7 +13,7 @@ app.append(header);
 let Count = 0;
 let growthRate = 0;
 
-// Available items defined in an array
+// Available items defined in  array
 const availableItems = [
   { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0 },
   { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0 },
@@ -48,7 +48,7 @@ const craftButton = document.createElement('button');
 // Set the button text
 craftButton.textContent = 'Crafts a Bullet';
 
-// Add an event listener (optional, but usually useful!)
+// Add an event listener
 craftButton.addEventListener('click', () => {
     Count++; // Increment counter
     updateDisplay(); // Update the display
@@ -60,7 +60,7 @@ document.body.appendChild(craftButton);
 // Create upgrade buttons using availableItems array
 availableItems.forEach(item => {
   const upgradeButton = document.createElement('button');
-  upgradeButton.textContent = `Purchase ${item.name} (${item.rate} rockets/sec for ${item.currentCost} units)`;
+  upgradeButton.textContent = `Purchase ${item.name} (make ${item.rate} bullets/sec and price is ${item.currentCost} bullets)`;
   app.appendChild(upgradeButton);
   
   upgradeButton.addEventListener('click', () => {
@@ -88,7 +88,7 @@ function animateCounter() {
   Count += growthRate; // Increment by a fraction per frame
   
   craftButton.disabled = false;
-  updateDisplay(); // Update the display
+  updateDisplay(); 
   requestAnimationFrame(animateCounter); // Schedule the next frame
 }
 
