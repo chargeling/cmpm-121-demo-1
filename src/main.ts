@@ -18,7 +18,7 @@ counterDisplay.textContent = `Launch: ${Count} rockets`;
 app.appendChild(counterDisplay);
 
 function updateDisplay() {
-  counterDisplay.textContent = `Launch: ${Count} rockets`;
+  counterDisplay.textContent = `Launch: ${Count.toFixed(2)} rockets`;
 }
 
 
@@ -39,9 +39,13 @@ button.addEventListener('click', () => {
 // Append the button to the body or another element
 document.body.appendChild(button);
 
-// Use setInterval to automatically increment the counter every second
-setInterval(() => {
-  Count++; // Increment counter
+// Function for animation frame updates
+function animateCounter() {
+  const incrementPerFrame = 1 / 240; // Increment amount per frame
+  Count += incrementPerFrame; // Increment by a fraction per frame
   updateDisplay(); // Update the display
-}, 1000); // 1000 milliseconds = 1 second
+  requestAnimationFrame(animateCounter); // Schedule the next frame
+}
 
+// Start the animation
+requestAnimationFrame(animateCounter);
