@@ -2,7 +2,7 @@ import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
-const gameName = "Something we call Games?";
+const gameName = "Arms Co";
 document.title = gameName;
 
 const header = document.createElement("h1");
@@ -35,8 +35,8 @@ const upgradesDisplay = document.createElement('div');
 app.appendChild(upgradesDisplay);
 
 function updateDisplay() {
-  counterDisplay.textContent = `Launch: ${Count.toFixed(2)} rockets`;
-  growthRateDisplay.textContent = `Growth Rate: ${(growthRate * 240).toFixed(2)} rockets/sec`;
+  counterDisplay.textContent = `Make: ${Count.toFixed(2)} Bullets`;
+  growthRateDisplay.textContent = `Craft Rate: ${(growthRate * 240).toFixed(2)} Bullets`;
   upgradesDisplay.textContent = `Upgrades - A: ${upgradesPurchased.A}, B: ${upgradesPurchased.B}, C: ${upgradesPurchased.C}`;
 }
 
@@ -45,7 +45,7 @@ function updateDisplay() {
 const button = document.createElement('button');
 
 // Set the button text
-button.textContent = 'Launch 🚀';
+button.textContent = 'Crafts a Bullet';
 
 // Add an event listener (optional, but usually useful!)
 button.addEventListener('click', () => {
@@ -81,7 +81,7 @@ function createUpgradeButton(key: keyof typeof upgrades) {
 // Update button text to reflect current cost
 function updateUpgradeButtonText(button: HTMLButtonElement, key: keyof typeof upgrades) {
   const { rate, currentCost } = upgrades[key];
-  button.textContent = `Purchase ${key} (${rate} rockets/sec for ${currentCost.toFixed(2)} units)`;
+  button.textContent = `Purchase Machine ${key} (${rate} Bullets/sec for ${currentCost.toFixed(2)} Bullets)`;
 }
 // Append the upgrade buttons to the app
 const upgradeButtons = {
