@@ -15,12 +15,14 @@ let growthRate = 0;
 
 // Count variables for upgrades
 let upgradesPurchased = { A: 0, B: 0, C: 0 };
+// Multiplier for price increase
+const priceMultiplier = 1.15;
 
 // Define upgrades
 const upgrades = {
-  A: { cost: 10, rate: 0.1 },
-  B: { cost: 100, rate: 2.0 },
-  C: { cost: 1000, rate: 50.0 }
+  A: { initialCost: 10, rate: 0.1, currentCost: 10 },
+  B: { initialCost: 100, rate: 2.0, currentCost: 100 },
+  C: { initialCost: 1000, rate: 50.0, currentCost: 1000 }
 };
 
 
@@ -57,20 +59,29 @@ document.body.appendChild(button);
 // Create upgrade buttons
 function createUpgradeButton(key: keyof typeof upgrades) {
   const upgradeButton = document.createElement('button');
-  const { cost, rate } = upgrades[key];
-  upgradeButton.textContent = `Purchase ${key} (${rate} rockets/sec for ${cost} units)`;
-  upgradeButton.disabled = Count < cost;
+  const { rate } = upgrades[key];
+  updateUpgradeButtonText(upgradeButton, key);
+
   upgradeButton.addEventListener('click', () => {
-    if (Count >= cost) {
-      Count -= cost;
+    const { currentCost } = upgrades[key];
+    if (Count >= currentCost) {
+      Count -= currentCost;
       growthRate += rate / 240;
       upgradesPurchased[key]++;
+      upgrades[key].currentCost *= priceMultiplier; // Increase cost
+      updateUpgradeButtonText(upgradeButton, key);
       updateDisplay();
     }
   });
   app.appendChild(upgradeButton);
 
   return upgradeButton;
+}
+
+// Update button text to reflect current cost
+function updateUpgradeButtonText(button: HTMLButtonElement, key: keyof typeof upgrades) {
+  const { rate, currentCost } = upgrades[key];
+  button.textContent = `Purchase ${key} (${rate} rockets/sec for ${currentCost.toFixed(2)} units)`;
 }
 // Append the upgrade buttons to the app
 const upgradeButtons = {
@@ -85,8 +96,8 @@ const upgradeButtons = {
 function animateCounter() {
   Count += growthRate; // Increment by a fraction per frame
   Object.entries(upgradeButtons).forEach(([key, button]) => {
-    const { cost } = upgrades[key as keyof typeof upgrades];
-    button.disabled = Count < cost;
+    const { currentCost } = upgrades[key as keyof typeof upgrades];
+    button.disabled = Count < currentCost;
   });
   updateDisplay(); // Update the display
   requestAnimationFrame(animateCounter); // Schedule the next frame
