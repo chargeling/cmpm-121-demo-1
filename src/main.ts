@@ -9,12 +9,13 @@ const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Declare a counter variable
+// Declare a counter variable and growth variable
 let Count = 0;
+let growthRate = 0;
 
 // Create a counter display element
 const counterDisplay = document.createElement('div');
-counterDisplay.textContent = `Launch: ${Count} rockets`;
+counterDisplay.textContent = `Launch: ${Count.toFixed(2)} rockets`;
 app.appendChild(counterDisplay);
 
 function updateDisplay() {
@@ -32,17 +33,31 @@ button.textContent = 'Launch 🚀';
 button.addEventListener('click', () => {
     Count++; // Increment counter
     updateDisplay(); // Update the display
-    console.log('Button was clicked!');
-    alert('Button was clicked!');
+    console.log('Rocket was launched!');
+    alert('Rocket was launched!');
   });
   
 // Append the button to the body or another element
 document.body.appendChild(button);
 
+// Create the upgrade button
+const upgradeButton = document.createElement('button');
+upgradeButton.textContent = 'Purchase Upgrade (+1 growth rate)';
+upgradeButton.disabled = true;
+upgradeButton.addEventListener('click', () => {
+  if (Count >= 10) { // Check if user can afford the upgrade
+    Count -= 10; // Deduct cost
+    growthRate += 1 / 240; // Increase growth rate
+    updateDisplay();
+  }
+});
+app.appendChild(upgradeButton);
+
+
 // Function for animation frame updates
 function animateCounter() {
-  const incrementPerFrame = 1 / 240; // Increment amount per frame
-  Count += incrementPerFrame; // Increment by a fraction per frame
+  Count += growthRate; // Increment by a fraction per frame
+  upgradeButton.disabled = Count < 10; // Disable the upgrade button if can't afford
   updateDisplay(); // Update the display
   requestAnimationFrame(animateCounter); // Schedule the next frame
 }
