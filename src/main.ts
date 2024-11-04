@@ -1,19 +1,19 @@
 import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
-
 const gameName = "Arms Co";
 document.title = gameName;
 
+// Initialize elements
 const header = document.createElement("h1");
 header.innerHTML = gameName;
 app.append(header);
 
-// Declare a counter variable and growth variable
-let Count = 0;
+// Game state variables
+let count = 0;
 let growthRate = 0;
 
-// Available items defined in  array
+// Available items for purchase
 const availableItems = [
   { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0 },
   { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0 },
@@ -22,75 +22,75 @@ const availableItems = [
   { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0 }
 ];
 
-
-// Multiplier for price increase
 const priceMultiplier = 1.15;
 
-// Create display element
-const counterDisplay = document.createElement('div');
-app.appendChild(counterDisplay);
-const growthRateDisplay = document.createElement('div');
-app.appendChild(growthRateDisplay);
-const upgradesDisplay = document.createElement('div');
-app.appendChild(upgradesDisplay);
+// Display elements
+const counterDisplay = document.createElement("div");
+const growthRateDisplay = document.createElement("div");
+const upgradesDisplay = document.createElement("div");
+
+app.append(counterDisplay, growthRateDisplay, upgradesDisplay);
 
 function updateDisplay() {
-  counterDisplay.textContent = `Make: ${Count.toFixed(2)} Bullets`;
+  counterDisplay.textContent = `Make: ${count.toFixed(2)} Bullets`;
   growthRateDisplay.textContent = `Craft Rate: ${(growthRate * 240).toFixed(2)} Bullets`;
   upgradesDisplay.textContent = availableItems.map(item => `${item.name}: ${item.count}`).join(", ");
 }
-updateDisplay();
 
+function initializeCraftButton() {
+  const craftButton = document.createElement("button");
+  craftButton.textContent = 'Crafts a Bullet';
+  craftButton.addEventListener('click', handleCraft);
+  document.body.appendChild(craftButton);
+}
 
-// Create a button element
-const craftButton = document.createElement('button');
+function handleCraft() {
+  count++;
+  updateDisplay();
+}
 
-// Set the button text
-craftButton.textContent = 'Crafts a Bullet';
-
-// Add an event listener
-craftButton.addEventListener('click', () => {
-    Count++; // Increment counter
-    updateDisplay(); // Update the display
+function initializeUpgradeButtons() {
+  availableItems.forEach(item => {
+    const upgradeButton = createUpgradeButton(item);
+    app.appendChild(upgradeButton);
   });
+}
+
+function createUpgradeButton(item: any): HTMLButtonElement {
+  const button = document.createElement('button');
+  updateUpgradeButtonText(button, item);
   
-// Append the button to the body or another element
-document.body.appendChild(craftButton);
+  button.addEventListener('click', () => handleUpgrade(item, button));
+  return button;
+}
 
-// Create upgrade buttons using availableItems array
-availableItems.forEach(item => {
-  const upgradeButton = document.createElement('button');
-  upgradeButton.textContent = `Purchase ${item.name} (make ${item.rate} bullets/sec and price is ${item.currentCost} bullets)`;
-  app.appendChild(upgradeButton);
-  
-  upgradeButton.addEventListener('click', () => {
-    if (Count >= item.currentCost) {
-      Count -= item.currentCost;
-      growthRate += item.rate / 240;
-      item.currentCost *= priceMultiplier;
-      item.count++;
-      updateUpgradeButtonText(upgradeButton, item);
-      updateDisplay();
-    }
-  });
+function handleUpgrade(item: any, button: HTMLButtonElement) {
+  if (count >= item.currentCost) {
+    count -= item.currentCost;
+    growthRate += item.rate / 240;
+    item.currentCost *= priceMultiplier;
+    item.count++;
+    updateUpgradeButtonText(button, item);
+    updateDisplay();
+  }
+}
 
-});
-
-// Update button text to reflect current cost
 function updateUpgradeButtonText(button: HTMLButtonElement, item: any) {
-  button.textContent = `Purchase ${item.name} (${item.rate} rockets/sec for ${item.currentCost.toFixed(2)} units)`;
+  button.textContent = `Purchase ${item.name} make (${item.rate} bullets/sec for ${item.currentCost.toFixed(2)} units)`;
 }
 
-
-
-// Function for animation frame updates
 function animateCounter() {
-  Count += growthRate; // Increment by a fraction per frame
-  
-  craftButton.disabled = false;
-  updateDisplay(); 
-  requestAnimationFrame(animateCounter); // Schedule the next frame
+  count += growthRate;
+  updateDisplay();
+  requestAnimationFrame(animateCounter);
 }
 
-// Start the animation
-requestAnimationFrame(animateCounter);
+function initializeGame() {
+  updateDisplay();
+  initializeCraftButton();
+  initializeUpgradeButtons();
+  requestAnimationFrame(animateCounter);
+}
+
+// Initialize the game
+initializeGame();
