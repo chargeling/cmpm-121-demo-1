@@ -16,10 +16,10 @@ let growthRate = 0; // Rate at which bullets auto-increase
 // Available items for purchase
 const availableItems = [
   { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0, description: "Hire a bullet man for handcrafting with tools" },
-  { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0, description: "Automate crafting with a machine and worker" },
-  { name: "Production line", initialCost: 1000, rate: 40.0, currentCost: 1000, count: 0, description: "Set up a production line for mass production" },
-  { name: "High precision Assembly line", initialCost: 12500, rate: 700.0, currentCost: 12500, count: 0, description: "Use high precision assembly for better quality" },
-  { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0, description: "Implement advanced mechanical control for efficiency" }
+  { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0, description: "A machine that helps the worker creating much faster each time. " },
+  { name: "Production line", initialCost: 1000, rate: 40.0, currentCost: 1000, count: 0, description: "A production line with multiple worker and everyone only focusing on one job and speed increase significantly" },
+  { name: "High precision Assembly line", initialCost: 12500, rate: 700.0, currentCost: 12500, count: 0, description: "This big machine help you with the factory that a few people are controling each part of machine and creating hundreds of bullets in one time." },
+  { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0, description: "Manpower is't need anymore, now in the factory, the giant robot are making countless of bullets in one time and you just have to sold them, power of technology." }
 ];
 
 const priceMultiplier = 1.15; // Determines cost increase after each upgrade purchase
