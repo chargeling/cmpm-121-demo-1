@@ -43,7 +43,7 @@ h1 {
   text-align: center;
   background-image: url('background.jpg'); 
   background-size: cover;
-  background-color: #000;
+  background-color: transparent;
 }
 
 button {
