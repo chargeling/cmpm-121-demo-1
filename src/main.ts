@@ -1,7 +1,7 @@
 import "./style.css";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
-const gameName = "Arms Co";
+const gameName = "Arms Co(The path to make the red on the background)";
 document.title = gameName;
 
 // Initialize elements
