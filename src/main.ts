@@ -15,11 +15,11 @@ let growthRate = 0; // Rate at which bullets auto-increase
 
 // Available items for purchase
 const availableItems = [
-  { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0 },
-  { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0 },
-  { name: "Production line", initialCost: 1000, rate: 40.0, currentCost: 1000, count: 0 },
-  { name: "High precision Assembly line", initialCost: 12500, rate: 700.0, currentCost: 12500, count: 0 },
-  { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0 }
+  { name: "Bullet man", initialCost: 10, rate: 0.1, currentCost: 10, count: 0, description: "Hire a bullet man for handcrafting with tools" },
+  { name: "Crafting Machine with Worker", initialCost: 100, rate: 2.0, currentCost: 100, count: 0, description: "Automate crafting with a machine and worker" },
+  { name: "Production line", initialCost: 1000, rate: 40.0, currentCost: 1000, count: 0, description: "Set up a production line for mass production" },
+  { name: "High precision Assembly line", initialCost: 12500, rate: 700.0, currentCost: 12500, count: 0, description: "Use high precision assembly for better quality" },
+  { name: "Highly Intelligent Mechanical Control Assembly Line", initialCost: 100000, rate: 9000.0, currentCost: 100000, count: 0, description: "Implement advanced mechanical control for efficiency" }
 ];
 
 const priceMultiplier = 1.15; // Determines cost increase after each upgrade purchase
@@ -64,22 +64,30 @@ function handleCraft() {
  */
 function initializeUpgradeButtons() {
   availableItems.forEach(item => {
-    const upgradeButton = createUpgradeButton(item);
-    app.appendChild(upgradeButton); // Append each new button to the app container
+    const upgradeContainer = createUpgradeButton(item);
+    app.appendChild(upgradeContainer); // Append each new container to the app container
   });
 }
 
 /**
  * Creates an upgrade button for a given item
  * @param item The upgrade item to create a button for
- * @returns The constructed button element
+ * @returns The constructed container element with button and description
  */
-function createUpgradeButton(item: any): HTMLButtonElement {
+function createUpgradeButton(item: any): HTMLDivElement {
+  const container = document.createElement('div');
   const button = document.createElement('button');
+  const description = document.createElement('p');
+
   updateUpgradeButtonText(button, item); // Set initial button text
-  
+  description.textContent = item.description; // Use the description from the item
+
   button.addEventListener('click', () => handleUpgrade(item, button)); // Handle upgrades on click
-  return button;
+
+  container.appendChild(button);
+  container.appendChild(description);
+
+  return container;
 }
 
 /**
